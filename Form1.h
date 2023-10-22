@@ -49,6 +49,50 @@ namespace CppCLRWinFormsProject {
 			if (array1[i] == key)textBoxIndexUnoptimized->Text = Convert::ToString(i);
 			else textBoxIndexUnoptimized->Text = "не найден";
 		}
+		void Optimalbinarysearch(int key) {
+			int L = 0;
+			int R = Size - 1;
+			int i;
+			int start_time = clock();
+			for (int j = 0; j < numberofrepetitions; j++) {
+				L = 0;
+				R = Size - 1;
+				while (R > L) {
+					i = (L + R) / 2;
+					if (key<=array1[i]) R = i;
+					else L = i + 1;
+				}
+			}
+			int end_time = clock();
+			textBoxTimeOptimalBinarySearch->Text = Convert::ToString(end_time - start_time);
+			if (array1[R] == key)textBoxIndexOptimalBinarySearch->Text = Convert::ToString(R);
+			else textBoxIndexOptimalBinarySearch->Text = "не найден";
+		}
+	public:
+		void InterpolationBinarySearch(int key) {
+			long  L = 0;
+			long  R = Size - 1;
+			long  i=0;
+			int start_time = clock();
+			for (int j = 0; j < 100; j++) {
+				L = 0;
+				R = Size - 1;
+				while ((array1[L] < key) && (key < array1[R])) {
+					i = L+ (key - array1[L]) * (R - L) / (array1[R] - array1[L]);
+					if (key == array1[i]) break;
+					if (key < array1[i]) R = i - 1;
+					else L = i + 1;
+				}
+
+			}
+			int end_time = clock();
+			textBoxTimeInterpolationBinarySearch->Text= Convert::ToString(end_time - start_time);
+			if (key == array1[L])i = L; else if (key == array1[R]) i = R;
+			if (array1[i] == key)textBoxIndexOptimalBinarySearch->Text = Convert::ToString(i);
+			else textBoxIndexOptimalBinarySearch->Text = "не найден";
+		}
+
+
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
@@ -77,13 +121,18 @@ namespace CppCLRWinFormsProject {
 	private: System::Windows::Forms::Splitter^ splitter6;
 	private: System::Windows::Forms::Splitter^ splitter7;
 	private: System::Windows::Forms::Splitter^ splitter8;
-	private: System::Windows::Forms::TextBox^ textBox3;
-	private: System::Windows::Forms::TextBox^ textBox4;
+	private: System::Windows::Forms::TextBox^ textBoxIndexOptimalBinarySearch;
+
+	private: System::Windows::Forms::TextBox^ textBoxTimeOptimalBinarySearch;
+
 	private: System::Windows::Forms::Label^ label6;
 	private: System::Windows::Forms::Label^ label7;
 	private: System::Windows::Forms::Label^ label8;
-	private: System::Windows::Forms::TextBox^ textBox5;
-	private: System::Windows::Forms::TextBox^ textBox6;
+	private: System::Windows::Forms::TextBox^ textBoxIndexInterpolationBinarySearch;
+
+
+private: System::Windows::Forms::TextBox^ textBoxTimeInterpolationBinarySearch;
+
 	private: System::Windows::Forms::Label^ label9;
 	private: System::Windows::Forms::Label^ label10;
 	private: System::Windows::Forms::Label^ label11;
@@ -129,13 +178,13 @@ namespace CppCLRWinFormsProject {
 			this->splitter6 = (gcnew System::Windows::Forms::Splitter());
 			this->splitter7 = (gcnew System::Windows::Forms::Splitter());
 			this->splitter8 = (gcnew System::Windows::Forms::Splitter());
-			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxIndexOptimalBinarySearch = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxTimeOptimalBinarySearch = (gcnew System::Windows::Forms::TextBox());
 			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->label8 = (gcnew System::Windows::Forms::Label());
-			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox6 = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxIndexInterpolationBinarySearch = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxTimeInterpolationBinarySearch = (gcnew System::Windows::Forms::TextBox());
 			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->label11 = (gcnew System::Windows::Forms::Label());
@@ -325,23 +374,23 @@ namespace CppCLRWinFormsProject {
 			this->splitter8->TabIndex = 15;
 			this->splitter8->TabStop = false;
 			// 
-			// textBox3
+			// textBoxIndexOptimalBinarySearch
 			// 
-			this->textBox3->AllowDrop = true;
-			this->textBox3->Location = System::Drawing::Point(268, 200);
-			this->textBox3->Name = L"textBox3";
-			this->textBox3->ReadOnly = true;
-			this->textBox3->Size = System::Drawing::Size(124, 22);
-			this->textBox3->TabIndex = 20;
+			this->textBoxIndexOptimalBinarySearch->AllowDrop = true;
+			this->textBoxIndexOptimalBinarySearch->Location = System::Drawing::Point(268, 200);
+			this->textBoxIndexOptimalBinarySearch->Name = L"textBoxIndexOptimalBinarySearch";
+			this->textBoxIndexOptimalBinarySearch->ReadOnly = true;
+			this->textBoxIndexOptimalBinarySearch->Size = System::Drawing::Size(124, 22);
+			this->textBoxIndexOptimalBinarySearch->TabIndex = 20;
 			// 
-			// textBox4
+			// textBoxTimeOptimalBinarySearch
 			// 
-			this->textBox4->AllowDrop = true;
-			this->textBox4->Location = System::Drawing::Point(71, 200);
-			this->textBox4->Name = L"textBox4";
-			this->textBox4->ReadOnly = true;
-			this->textBox4->Size = System::Drawing::Size(124, 22);
-			this->textBox4->TabIndex = 19;
+			this->textBoxTimeOptimalBinarySearch->AllowDrop = true;
+			this->textBoxTimeOptimalBinarySearch->Location = System::Drawing::Point(71, 200);
+			this->textBoxTimeOptimalBinarySearch->Name = L"textBoxTimeOptimalBinarySearch";
+			this->textBoxTimeOptimalBinarySearch->ReadOnly = true;
+			this->textBoxTimeOptimalBinarySearch->Size = System::Drawing::Size(124, 22);
+			this->textBoxTimeOptimalBinarySearch->TabIndex = 19;
 			// 
 			// label6
 			// 
@@ -376,23 +425,23 @@ namespace CppCLRWinFormsProject {
 			this->label8->TabIndex = 16;
 			this->label8->Text = L"Oптимальный бинарный поиск";
 			// 
-			// textBox5
+			// textBoxIndexInterpolationBinarySearch
 			// 
-			this->textBox5->AllowDrop = true;
-			this->textBox5->Location = System::Drawing::Point(268, 272);
-			this->textBox5->Name = L"textBox5";
-			this->textBox5->ReadOnly = true;
-			this->textBox5->Size = System::Drawing::Size(124, 22);
-			this->textBox5->TabIndex = 25;
+			this->textBoxIndexInterpolationBinarySearch->AllowDrop = true;
+			this->textBoxIndexInterpolationBinarySearch->Location = System::Drawing::Point(268, 272);
+			this->textBoxIndexInterpolationBinarySearch->Name = L"textBoxIndexInterpolationBinarySearch";
+			this->textBoxIndexInterpolationBinarySearch->ReadOnly = true;
+			this->textBoxIndexInterpolationBinarySearch->Size = System::Drawing::Size(124, 22);
+			this->textBoxIndexInterpolationBinarySearch->TabIndex = 25;
 			// 
-			// textBox6
+			// textBoxTimeInterpolationBinarySearch
 			// 
-			this->textBox6->AllowDrop = true;
-			this->textBox6->Location = System::Drawing::Point(71, 272);
-			this->textBox6->Name = L"textBox6";
-			this->textBox6->ReadOnly = true;
-			this->textBox6->Size = System::Drawing::Size(124, 22);
-			this->textBox6->TabIndex = 24;
+			this->textBoxTimeInterpolationBinarySearch->AllowDrop = true;
+			this->textBoxTimeInterpolationBinarySearch->Location = System::Drawing::Point(71, 272);
+			this->textBoxTimeInterpolationBinarySearch->Name = L"textBoxTimeInterpolationBinarySearch";
+			this->textBoxTimeInterpolationBinarySearch->ReadOnly = true;
+			this->textBoxTimeInterpolationBinarySearch->Size = System::Drawing::Size(124, 22);
+			this->textBoxTimeInterpolationBinarySearch->TabIndex = 24;
 			// 
 			// label9
 			// 
@@ -579,13 +628,13 @@ namespace CppCLRWinFormsProject {
 			this->Controls->Add(this->label12);
 			this->Controls->Add(this->label13);
 			this->Controls->Add(this->label14);
-			this->Controls->Add(this->textBox5);
-			this->Controls->Add(this->textBox6);
+			this->Controls->Add(this->textBoxIndexInterpolationBinarySearch);
+			this->Controls->Add(this->textBoxTimeInterpolationBinarySearch);
 			this->Controls->Add(this->label9);
 			this->Controls->Add(this->label10);
 			this->Controls->Add(this->label11);
-			this->Controls->Add(this->textBox3);
-			this->Controls->Add(this->textBox4);
+			this->Controls->Add(this->textBoxIndexOptimalBinarySearch);
+			this->Controls->Add(this->textBoxTimeOptimalBinarySearch);
 			this->Controls->Add(this->label6);
 			this->Controls->Add(this->label7);
 			this->Controls->Add(this->label8);
@@ -628,6 +677,8 @@ private: System::Void Form1_Load(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void buttonFind_Click(System::Object^ sender, System::EventArgs^ e) {
 	Suboptimalbinarysearch(Convert::ToInt64(numericUpDown1->Value));
+	Optimalbinarysearch(Convert::ToInt64(numericUpDown1->Value));
+	InterpolationBinarySearch(Convert::ToInt64(numericUpDown1->Value));
 }
 };
 }
