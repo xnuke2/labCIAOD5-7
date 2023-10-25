@@ -25,7 +25,7 @@ namespace CppCLRWinFormsProject {
 
 		const static int Size = 10000000;
 		const int numberofrepetitions = 1000000;
-		static array<int>^ array1 = gcnew array<int>(Size);
+		static array<int>^ array1 = gcnew array<int>(Size+1);
 
 		void Suboptimalbinarysearch(int key) {
 			int L = 0;
@@ -72,13 +72,14 @@ namespace CppCLRWinFormsProject {
 		void InterpolationBinarySearch(int key) {
 			long  L = 0;
 			long  R = Size - 1;
-			long  i=0;
+			long int i=0;
 			int start_time = clock();
-			for (int j = 0; j < 100; j++) {
+			for (int j = 0; j < numberofrepetitions; j++) {
 				L = 0;
 				R = Size - 1;
 				while ((array1[L] < key) && (key < array1[R])) {
-					i = L+ (key - array1[L]) * (R - L) / (array1[R] - array1[L]);
+					i = L + (int)(((double)(R - L) / (array1[R] - array1[L])) * (key - array1[L]));
+					//i = L+ (key - array1[L]) * (R - L) / (array1[R] - array1[L]);
 					if (key == array1[i]) break;
 					if (key < array1[i]) R = i - 1;
 					else L = i + 1;
@@ -88,11 +89,47 @@ namespace CppCLRWinFormsProject {
 			int end_time = clock();
 			textBoxTimeInterpolationBinarySearch->Text= Convert::ToString(end_time - start_time);
 			if (key == array1[L])i = L; else if (key == array1[R]) i = R;
-			if (array1[i] == key)textBoxIndexOptimalBinarySearch->Text = Convert::ToString(i);
-			else textBoxIndexOptimalBinarySearch->Text = "не найден";
+			if (array1[i] == key)textBoxIndexInterpolationBinarySearch->Text = Convert::ToString(i);
+			else textBoxIndexInterpolationBinarySearch->Text = "не найден";
 		}
 
+		void sequentialBinarySearch(int key) {
+			int p = 0;
+			int b = Size / 2;
+			int start_time = clock();
+			for (int j = 0; j < numberofrepetitions; j++) {
+				p = 0;
+				b = Size / 2;
+				while (b > 0) {
+					while ((p + b < Size) && (array1[p + b] <= key))p += b;
+					b = b / 2;
+				}
+			}
+			int end_time = clock();
+			textBoxTimeSequentialBinarySearch->Text = Convert::ToString(end_time - start_time);
+			if (array1[p] == key)textBoxIndexSequentialBinarySearch->Text = Convert::ToString(p);
+			else textBoxIndexSequentialBinarySearch->Text = "не найден";
 
+		}
+		void optimized_search(int key) {
+			array1[Size] = key + 1;
+			int i = 0;
+			int start_time = clock();
+			for (int j = 0; j < numberofrepetitions/1000; j++) {
+				i = 0;
+				while (key > array1[i]) {
+					i++;
+				}
+			}
+			int end_time = clock();
+			textBoxTimeOptimized_search->Text = Convert::ToString((end_time - start_time) * 1000);
+			if (key == array1[i]) {
+				textBoxIndexOptimized_search->Text = Convert::ToString(i);
+			}
+			else {
+				textBoxIndexOptimized_search->Text = "Не найден";
+			}
+		}
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
@@ -136,13 +173,17 @@ private: System::Windows::Forms::TextBox^ textBoxTimeInterpolationBinarySearch;
 	private: System::Windows::Forms::Label^ label9;
 	private: System::Windows::Forms::Label^ label10;
 	private: System::Windows::Forms::Label^ label11;
-	private: System::Windows::Forms::TextBox^ textBox7;
-	private: System::Windows::Forms::TextBox^ textBox8;
+private: System::Windows::Forms::TextBox^ textBoxIndexSequentialBinarySearch;
+
+private: System::Windows::Forms::TextBox^ textBoxTimeSequentialBinarySearch;
+
 	private: System::Windows::Forms::Label^ label12;
 	private: System::Windows::Forms::Label^ label13;
 	private: System::Windows::Forms::Label^ label14;
-	private: System::Windows::Forms::TextBox^ textBox9;
-	private: System::Windows::Forms::TextBox^ textBox10;
+private: System::Windows::Forms::TextBox^ textBoxIndexOptimized_search;
+
+private: System::Windows::Forms::TextBox^ textBoxTimeOptimized_search;
+
 	private: System::Windows::Forms::Label^ label15;
 	private: System::Windows::Forms::Label^ label16;
 	private: System::Windows::Forms::Label^ label17;
@@ -188,13 +229,13 @@ private: System::Windows::Forms::TextBox^ textBoxTimeInterpolationBinarySearch;
 			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->label11 = (gcnew System::Windows::Forms::Label());
-			this->textBox7 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox8 = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxIndexSequentialBinarySearch = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxTimeSequentialBinarySearch = (gcnew System::Windows::Forms::TextBox());
 			this->label12 = (gcnew System::Windows::Forms::Label());
 			this->label13 = (gcnew System::Windows::Forms::Label());
 			this->label14 = (gcnew System::Windows::Forms::Label());
-			this->textBox9 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox10 = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxIndexOptimized_search = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxTimeOptimized_search = (gcnew System::Windows::Forms::TextBox());
 			this->label15 = (gcnew System::Windows::Forms::Label());
 			this->label16 = (gcnew System::Windows::Forms::Label());
 			this->label17 = (gcnew System::Windows::Forms::Label());
@@ -476,23 +517,23 @@ private: System::Windows::Forms::TextBox^ textBoxTimeInterpolationBinarySearch;
 			this->label11->TabIndex = 21;
 			this->label11->Text = L"Интерполяционный бинарный поиск";
 			// 
-			// textBox7
+			// textBoxIndexSequentialBinarySearch
 			// 
-			this->textBox7->AllowDrop = true;
-			this->textBox7->Location = System::Drawing::Point(268, 344);
-			this->textBox7->Name = L"textBox7";
-			this->textBox7->ReadOnly = true;
-			this->textBox7->Size = System::Drawing::Size(124, 22);
-			this->textBox7->TabIndex = 30;
+			this->textBoxIndexSequentialBinarySearch->AllowDrop = true;
+			this->textBoxIndexSequentialBinarySearch->Location = System::Drawing::Point(268, 344);
+			this->textBoxIndexSequentialBinarySearch->Name = L"textBoxIndexSequentialBinarySearch";
+			this->textBoxIndexSequentialBinarySearch->ReadOnly = true;
+			this->textBoxIndexSequentialBinarySearch->Size = System::Drawing::Size(124, 22);
+			this->textBoxIndexSequentialBinarySearch->TabIndex = 30;
 			// 
-			// textBox8
+			// textBoxTimeSequentialBinarySearch
 			// 
-			this->textBox8->AllowDrop = true;
-			this->textBox8->Location = System::Drawing::Point(71, 344);
-			this->textBox8->Name = L"textBox8";
-			this->textBox8->ReadOnly = true;
-			this->textBox8->Size = System::Drawing::Size(124, 22);
-			this->textBox8->TabIndex = 29;
+			this->textBoxTimeSequentialBinarySearch->AllowDrop = true;
+			this->textBoxTimeSequentialBinarySearch->Location = System::Drawing::Point(71, 344);
+			this->textBoxTimeSequentialBinarySearch->Name = L"textBoxTimeSequentialBinarySearch";
+			this->textBoxTimeSequentialBinarySearch->ReadOnly = true;
+			this->textBoxTimeSequentialBinarySearch->Size = System::Drawing::Size(124, 22);
+			this->textBoxTimeSequentialBinarySearch->TabIndex = 29;
 			// 
 			// label12
 			// 
@@ -527,23 +568,24 @@ private: System::Windows::Forms::TextBox^ textBoxTimeInterpolationBinarySearch;
 			this->label14->TabIndex = 26;
 			this->label14->Text = L"\"Последовательный\" бинарный поиск";
 			// 
-			// textBox9
+			// textBoxIndexOptimized_search
 			// 
-			this->textBox9->AllowDrop = true;
-			this->textBox9->Location = System::Drawing::Point(268, 416);
-			this->textBox9->Name = L"textBox9";
-			this->textBox9->ReadOnly = true;
-			this->textBox9->Size = System::Drawing::Size(124, 22);
-			this->textBox9->TabIndex = 35;
+			this->textBoxIndexOptimized_search->AllowDrop = true;
+			this->textBoxIndexOptimized_search->Location = System::Drawing::Point(268, 416);
+			this->textBoxIndexOptimized_search->Name = L"textBoxIndexOptimized_search";
+			this->textBoxIndexOptimized_search->ReadOnly = true;
+			this->textBoxIndexOptimized_search->Size = System::Drawing::Size(124, 22);
+			this->textBoxIndexOptimized_search->TabIndex = 35;
+			this->textBoxIndexOptimized_search->TextChanged += gcnew System::EventHandler(this, &Form1::textBox9_TextChanged);
 			// 
-			// textBox10
+			// textBoxTimeOptimized_search
 			// 
-			this->textBox10->AllowDrop = true;
-			this->textBox10->Location = System::Drawing::Point(71, 416);
-			this->textBox10->Name = L"textBox10";
-			this->textBox10->ReadOnly = true;
-			this->textBox10->Size = System::Drawing::Size(124, 22);
-			this->textBox10->TabIndex = 34;
+			this->textBoxTimeOptimized_search->AllowDrop = true;
+			this->textBoxTimeOptimized_search->Location = System::Drawing::Point(71, 416);
+			this->textBoxTimeOptimized_search->Name = L"textBoxTimeOptimized_search";
+			this->textBoxTimeOptimized_search->ReadOnly = true;
+			this->textBoxTimeOptimized_search->Size = System::Drawing::Size(124, 22);
+			this->textBoxTimeOptimized_search->TabIndex = 34;
 			// 
 			// label15
 			// 
@@ -618,13 +660,13 @@ private: System::Windows::Forms::TextBox^ textBoxTimeInterpolationBinarySearch;
 			this->Controls->Add(this->buttonExit);
 			this->Controls->Add(this->buttonFind);
 			this->Controls->Add(this->splitter9);
-			this->Controls->Add(this->textBox9);
-			this->Controls->Add(this->textBox10);
+			this->Controls->Add(this->textBoxIndexOptimized_search);
+			this->Controls->Add(this->textBoxTimeOptimized_search);
 			this->Controls->Add(this->label15);
 			this->Controls->Add(this->label16);
 			this->Controls->Add(this->label17);
-			this->Controls->Add(this->textBox7);
-			this->Controls->Add(this->textBox8);
+			this->Controls->Add(this->textBoxIndexSequentialBinarySearch);
+			this->Controls->Add(this->textBoxTimeSequentialBinarySearch);
 			this->Controls->Add(this->label12);
 			this->Controls->Add(this->label13);
 			this->Controls->Add(this->label14);
@@ -679,6 +721,10 @@ private: System::Void buttonFind_Click(System::Object^ sender, System::EventArgs
 	Suboptimalbinarysearch(Convert::ToInt64(numericUpDown1->Value));
 	Optimalbinarysearch(Convert::ToInt64(numericUpDown1->Value));
 	InterpolationBinarySearch(Convert::ToInt64(numericUpDown1->Value));
+	sequentialBinarySearch(Convert::ToInt64(numericUpDown1->Value));
+	optimized_search(Convert::ToInt64(numericUpDown1->Value));
+}
+private: System::Void textBox9_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }
